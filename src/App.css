@@ -1,0 +1,196 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.overlay {
+  box-sizing: border-box;
+  margin: 5%;
+  height: 70vh;
+  text-align: center;
+  -webkit-user-select: none;
+  user-select: none;
+  border: 1px solid white;
+  background-color: white;
+  position: absolute;
+  z-index: 5;
+  top: 0%;
+  right: 0;
+  width: 90%;
+  display: none;
+}
+#question-overlay {
+  height: 80vh;
+}
+
+.gray-overlay {
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  background-color: rgba(169, 169, 169, 0.6);
+  display: none;
+}
+#space-overlay{
+  height:85vh;
+}
+.space-overlay {
+  display: block !important;
+}
+
+.question-overlay-form {
+  margin: auto;
+  padding: 5% 15%;
+}
+.question-overlay-ask-button.MuiGrid-item {
+  margin-top: 10%;
+}
+.question-overlay-search .MuiInputBase-input {
+  height: 0em;
+}
+#add-question-response {
+  position: absolute;
+  z-index: 7;
+  width: 50%;
+  top: 25%;
+  right: 25%;
+  display: block;
+  background-color: white;
+  border: 2px solid black;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+}
+#add-question-button {
+  margin: 5px;
+}
+#profile-view {
+  text-align: center;
+  padding-top: 10px;
+}
+#profile-image {
+  height: auto;
+  display: inline-block;
+}
+#profile-image img{
+  max-height: 200px;
+  width:auto;
+}
+
+#transaction-list {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.right-container {
+  overflow: scroll;
+  height: 100%;
+  margin: 0;
+}
+
+.right-container {
+  overflow-y: scroll;
+  height: 100%;
+  max-width: 100%;
+}
+
+.space-results {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(186px, 1fr));
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 5%;
+}
+
+.space-results > * {
+  height: 100%;
+}
+
+.space-search {
+  text-align: center;
+  margin-top: 2%;
+}
+
+.space-search > .MuiInputBase-root {
+  font-size: 2rem;
+  width: 40%;
+  top: 30%;
+}
+
+.space-object:hover {
+  transition: all 0.2s ease-in-out;
+  transform: scale(1.05);
+}
+
+.space-placeholder-text {
+  margin-top: 30%;
+  text-align: center;
+  font-style: italic;
+}
+
+.overlay-name {
+  width: 100%;
+  margin: auto;
+  padding-left: 20px;
+  padding-right: 25px;
+  margin-top: 5%;
+}
+
+.overlay-name p {
+  margin-top: 1%;
+}
+
+.overlay-answers {
+  display: list;
+  margin-top: 2%;
+  margin-right: 20%;
+  margin-left: 20%;
+}
+
+.exp .MuiCardContent-root {
+  padding: 5px;
+}
+
+.add-space-button {
+  margin-top: 2%;
+  text-align: center;
+}
+
+.transaction-search {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(186px, 1fr));
+  margin-right: 15%;
+  margin-left: 15%;
+  margin-top: 5%;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

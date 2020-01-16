@@ -1,0 +1,38 @@
+[
+  {
+    "space_id": "1",
+    "name": "The Edge",
+    "coordinates": [1000, 2000],
+    "img_urls": "https://www.thesun.co.uk/wp-content/uploads/2019/03/NINTCHDBPICT000473622967.jpg"
+  },
+  {
+    "space_id": "2",
+    "name": "Perkins",
+    "coordinates": [2000, 3000],
+    "img_urls": "https://qph.fs.quoracdn.net/main-qimg-5a6025638cf5c2be6e6ab7fdc2193f8e.webp"
+  },
+  {
+    "space_id": "3",
+    "name": "The Link",
+    "coordinates": [3000, 4000],
+    "img_urls": "https://qph.fs.quoracdn.net/main-qimg-5a6025638cf5c2be6e6ab7fdc2193f8e.webp"
+  },
+  {
+    "space_id": "4",
+    "name": "West Union",
+    "coordinates": [4000, 5000],
+    "img_urls": "https://qph.fs.quoracdn.net/main-qimg-5a6025638cf5c2be6e6ab7fdc2193f8e.webp"
+  },
+  {
+    "space_id": "5",
+    "name": "Bryan Center",
+    "coordinates": [5000, 6000],
+    "img_urls": "https://qph.fs.quoracdn.net/main-qimg-5a6025638cf5c2be6e6ab7fdc2193f8e.webp"
+  },
+  {
+    "space_id": "6",
+    "name": "Shooters",
+    "coordinates": [6000, 7000],
+    "img_urls": "https://qph.fs.quoracdn.net/main-qimg-5a6025638cf5c2be6e6ab7fdc2193f8e.webp"
+  }
+]

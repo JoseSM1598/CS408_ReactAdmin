@@ -1,0 +1,508 @@
+syntax = "proto3";
+
+package api_proto;
+option java_package = "com.ourspace.generated_files";
+option java_outer_classname = "APIProtos";
+
+// ----------------------------------------------------
+// ------------------BUILDING BLOCKS-------------------
+// ----------------------------------------------------
+
+message Coordinates {
+    double latitude = 1;
+    double longitude = 2;
+}
+
+message Space {
+    string space_id = 1;
+    string name = 2;
+    Coordinates coordinates = 3;
+}
+
+message SpaceDetail {
+    Space space =1;
+    repeated string alias = 2;
+}
+
+message SearchResult {
+    string name = 1;
+    string id = 2;
+}
+
+message AppVersion {
+    double version = 1;
+}
+// ---------------------------------------------------
+
+message User {
+    string user_id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string photo_url = 4;
+    bool is_onboarding = 5;
+    sint32 points = 6;
+    uint32 num_thanks = 7;
+    uint32 num_revokes = 8;
+    bool is_admin = 9;
+}
+
+message Thanker { // DEPRECATED on 4.0
+    string first_name = 1;
+    string last_name = 2;
+    string photo_url = 3;
+}
+
+
+// -------------------------------------------
+
+message Answer {
+    string answer_id = 1;
+    string answer_text = 2;
+    User answered_by = 3;
+    uint64 created_at = 4;
+    Space space = 5; // DEPRECATED on 4.0
+}
+
+// ------------------------------------
+
+enum CustomQuestionStatus {
+    ASKED = 0;
+    ANSWERED = 1;
+    CANCELED = 2;
+    CLEARED = 3;
+
+    // question lifecycle
+    // ASKED -> ANSWERED if answered
+    //       -> CANCELED if canceled
+    //       -> CLEARED  if unanswered for X mins
+    // ANSWERED -> CLEARED if
+    //         no one views the answer to the question
+    //         for Y mins
+    //
+    // Let's go with fixed X = Y = 30 for now.
+}
+
+message CustomQuestion {
+    string custom_question_id = 1;
+    string question_text = 2;
+    uint32 price = 3; // DEPRECATED on 4.0
+    CustomQuestionStatus status = 4;
+    uint64 status_updated_at = 5;
+    uint64 created_at = 6;
+}
+
+message FullCustomQuestion {
+    CustomQuestion question = 1;
+    Space space = 2;
+    User asked_by = 3;
+    repeated Answer answers = 4;
+}
+
+// ----------------------------------------
+
+message AnswerValue {
+    oneof answer {
+        bool boolean_value = 1;
+        uint32 integer_value = 2;
+        double double_value = 3;
+        string text_value = 4;
+    }
+}
+
+message DefaultAnswerOption {
+    string display_text = 1;
+    string icon_url = 2;
+    string color_hex = 3;
+    AnswerValue answer_value = 4;
+}
+
+message DefaultQuestion {
+    string default_question_id = 1;
+    string asker_display_text = 2;
+    // "See busyness"
+    string answerer_display_text = 3;
+    // "How busy is it?"
+    uint32 price = 4;
+    uint32 num_users_waiting = 5;
+    uint64 last_answered_at = 6;
+    repeated DefaultAnswerOption answer_options = 7;
+}
+
+message FullDefaultQuestion {
+    DefaultQuestion question = 1;
+    Space space = 2;
+    repeated Answer answers = 3;
+}
+
+// ------------------------------------------
+
+message AnyQuestion {
+    oneof question {
+        DefaultQuestion default_question = 1;
+        CustomQuestion custom_question = 2;
+    }
+}
+
+
+enum TransactionStatus { // DEPRECATED on 4.0
+    APPROVED = 0;
+    UNDER_REVIEW = 1;
+    CANCELLED = 2;
+}
+
+message TransactionView { // DEPRECATED on 4.0
+    User other = 1;
+    sint32 diff = 2;
+    uint64 created_at = 3;
+    uint64 status_updated_at = 4;
+    TransactionStatus status = 5;
+}
+
+// ------------------------------------------
+
+message ThankYou {
+    Thanker thanker = 1; // DEPRECATED on 4.0
+    uint64 thank_time = 2;
+    Answer answer = 3; // DEPRECATED on 4.0
+}
+
+// ----------------------------------------------------
+// -----------------------APIs-------------------------
+// ----------------------------------------------------
+
+
+// ---------------------- ZORO ------------------------
+
+message WaitOnDefaultQuestionRequest { // DEPRECATED on 4.0
+    string user_id = 1;
+    string space_id = 2;
+    string default_question_id = 3;
+}
+
+message WaitOnDefaultQuestionResponse { // DEPRECATED on 4.0
+    sint32 pointsAfter = 1;
+}
+
+//  --------------------------------------------
+
+
+message AskDefaultQuestionResponse {}
+
+// ------------------------------------------
+
+message AnswerDefaultQuestionRequest {
+    string user_id = 1;
+    string default_question_id = 2;
+    string space_id = 3;
+    AnswerValue answerValue = 4;
+}
+
+message AnswerDefaultQuestionResponse {
+    sint32 pointsAfter = 1; // DEPRECATED on 4.0
+}
+
+// ---------------------------------------------
+
+message AskCustomQuestionRequest {
+    string user_id = 1;
+    string space_id = 2;
+    string question_text = 3;
+    uint32 price = 4; // DEPRECATED on 4.0
+}
+
+message AskCustomQuestionResponse {
+    sint32 pointsAfter = 1; // DEPRECATED on 4.0
+}
+
+// ------------------------------------------
+
+message AnswerCustomQuestionRequest {
+    string user_id = 1;
+    string custom_question_id = 2;
+    string space_id = 3;
+    string answer = 4;
+}
+
+message AnswerCustomQuestionResponse {
+    sint32 pointsAfter = 1; // DEPRECATED on 4.0
+}
+
+// ------------------------------------------
+
+message ThankAnswerRequest {
+    string user_id = 1;
+    string answer_id = 2;
+}
+
+// ------------------------------------------
+
+
+// ------------------------------------------
+
+message ReportAnswerRequest {
+    string user_id = 1;
+    string answer_id = 2;
+    string reason = 3;
+    string evidence_img_url = 4;
+}
+
+// ------------------------------------------
+
+message AuthViewCreateIfNoUserRequest {
+    string user_id = 1;
+    string email = 2;
+    string photo_url = 3;
+}
+
+message AuthViewCreateIfNoUserResponse {
+    User user = 1;
+}
+
+// ------------------------------------------
+
+message NotificationAnswer { // DEPRECATED on 4.0
+    AnyQuestion question = 1;
+    repeated Answer answer = 2;
+    Space space = 3;
+}
+
+message NotificationGetNotificationsRequest {
+    string user_id = 1;
+    Coordinates coordinates = 2;
+    double distance_limit = 3;
+}
+
+message NotificationGetNotificationsResponse {
+    repeated FullDefaultQuestion default_questions = 1;
+    repeated FullCustomQuestion custom_questions = 2;
+    repeated NotificationAnswer answers = 3; // DEPRECATED on 4.0
+    repeated TransactionView transactions = 4; // DEPRECATED on 4.0
+    repeated ThankYou thanks = 5;
+}
+
+// ------------------------------------------
+
+message LandingViewFinishOnboardingRequest {
+    string user_id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string photo_url = 4;
+}
+
+message LandingViewFinishOnboardingResponse {
+    User user = 1;
+}
+
+// ------------------------------------------
+
+message ProfileViewQuestion { // DEPRECATED on 4.0
+    oneof question {
+        FullCustomQuestion custom_question = 1;
+        FullDefaultQuestion default_question = 2;
+    }
+}
+
+
+message ProfileViewGetUserRequest {
+    string uid = 1;
+}
+
+message ProfileViewGetUserResponse {
+    User user = 1;
+    repeated ProfileViewQuestion asked_questions = 2; // DEPRECATED on 4.0
+    repeated TransactionView transactions = 3; // DEPRECATED on 4.0
+}
+
+message ProfileViewGetAllUsersResponse {
+    repeated ProfileViewGetUserResponse users = 1;
+}
+
+// ------------------------------------------
+
+message AskSpaceViewGetDefaultQuestionRequest { // DEPRECATED on 4.0
+    string space_id = 1;
+}
+
+message AskSpaceViewGetDefaultQuestionResponse { // DEPRECATED on 4.0
+    DefaultQuestion question = 1;
+}
+
+message AskSpaceViewGetCustomQuestionsRequest { // DEPRECATED on 4.0
+    string space_id = 1;
+}
+
+message AskSpaceViewGetCustomQuestionsResponse { // DEPRECATED on 4.0
+    repeated CustomQuestion questions = 1;
+}
+
+message AskSpaceViewBuyAnswersRequest { // DEPRECATED on 4.0
+    string user_id = 1;
+    string question_id = 2;
+}
+
+message AskSpaceViewBuyAnswersResponse { // DEPRECATED on 4.0
+    repeated Answer answers = 1;
+}
+
+// ------------------------------------------
+
+message NearbyViewGetQuestionsRequest { // DEPRECATED on 4.0
+    Coordinates coordinates = 1;
+    double distance_limit = 2; // if nil, inf
+}
+
+message NearbyViewCustomQuestion { // DEPRECATED on 4.0
+    CustomQuestion question = 1;
+    Space space = 2;
+    User user = 3;
+}
+
+message NearbyViewDefaultQuestion { // DEPRECATED on 4.0
+    DefaultQuestion question = 1;
+    Space space = 2;
+}
+
+
+message NearbyViewGetQuestionsResponse { // DEPRECATED on 4.0
+                                         repeated NearbyViewCustomQuestion custom_questions = 1;
+                                         repeated NearbyViewDefaultQuestion default_questions = 2;
+}
+
+message AnyNearbyViewQuestion {
+    oneof question{
+        NearbyViewCustomQuestion customQuestion = 1;
+        NearbyViewDefaultQuestion defaultQuestion = 2;
+    }
+}
+
+message NearbyViewGetQuestionsResponseCombined {
+    repeated AnyNearbyViewQuestion nearbyViewQuestion = 1;
+}
+
+// ----------------ADMIN_ONLY------------------
+enum TransactionType{
+    PAY_FOR_QUESTION = 0;
+    REWARD_ANSWER = 1;
+}
+
+message TransactionObject{
+    TransactionType type = 1;
+    uint32 amount = 2;
+    string initiator = 3;
+    TransactionStatus status = 4;
+    uint64 time_created = 5;
+    uint64 time_updated = 6;
+    string subject = 7;
+    string id = 8;
+}
+
+message GetAllTransactionsRequest{
+}
+
+message GetAllTransactionsResponse{
+    repeated TransactionObject transactions = 1;
+}
+
+
+// ----------------APOLLO------------------
+
+
+
+enum SpaceCategory {
+    LINE = 0;
+    SPACE = 1;
+}
+
+message SearchSpaceByNameRequest {
+    string query_string = 1;
+    Coordinates coordinates = 2;
+    bool is_valid_coordinates = 3;
+}
+
+message SearchSpaceByNameResponse {
+    repeated Space results = 1;
+}
+
+message AddPartialSpaceRequest {
+    Space space = 1;
+}
+
+message AddPartialSpaceResponse {
+    string id = 1;
+}
+
+message AddFullSpaceRequest {
+    SpaceDetail space =1;
+}
+
+message AddFullSpaceResponse {
+    string id =1;
+}
+
+
+message GetSpaceDetailsRequest {
+    string id = 1;
+}
+
+message GetSpaceDetailsResponse {
+    Space space = 1;
+}
+
+message GetBulkSpaceDetailsRequest {
+    repeated string ids = 1;
+}
+
+message GetBulkSpaceDetailsResponse {
+    repeated Space spaces = 1;
+}
+
+message GetNearbySpaceRequest {
+    Coordinates coordinates = 1;
+    double distance_limit = 2;
+}
+
+message GetNearbySpaceResponse {
+    repeated Space spaces = 1;
+}
+
+message DeleteQuestionRequest {
+    string qid = 1;
+}
+
+message DeleteQuestionResponse {
+    bool success = 1;
+}
+
+message GetAllSpacesResponse {
+    repeated SpaceDetail spaces =1;
+}
+
+message UpdateSpaceRequest {
+    string space_id =1;
+    SpaceDetail space =2;
+}
+
+
+message UpdateSpaceResponse {
+    SpaceDetail space =1;
+}
+
+
+message GetAllAnswersRequest {
+
+}
+
+message GetAllAnswersResponse {
+    repeated Answer answers = 1;
+}
+
+
+message GetAllQuestionsRequest {
+}
+
+message GetAllQuestionsResponse {
+    repeated CustomQuestion customQuestions = 1;
+    repeated DefaultQuestion defaultQuestions = 2;
+}
+
+
